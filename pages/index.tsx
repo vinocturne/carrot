@@ -3,7 +3,7 @@ import Layout from "../components/layout";
 
 const Home: NextPage = () => {
     return (
-        <Layout title="Home" hasTabBar>
+        <Layout title="홈" hasTabBar>
             <div className="flex flex-col space-y-5 overflow-y-auto">
                 {[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1].map((_, i) => (
                     <div
