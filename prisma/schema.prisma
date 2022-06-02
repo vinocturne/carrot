@@ -1,13 +1,20 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
+
+//Vitess는 MySQL과 달리 foreign key를 사용하지 않음
+//확인 작업을 프리즈마 자체에서 진행할 수 있도록 해야 함.
+
+  //previewFeatures, 다른 객체에 연결될 때 해당 객체가 존재하는지 확인하는 옵션
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["referentialIntegrity"]
 }
 
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
+  referentialIntegrity = "prisma"
 }
 
 model User{
