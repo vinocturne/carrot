@@ -3,28 +3,26 @@ import withHandler, { ResponseType } from "@libs/server/withHandler";
 import { NextApiRequest, NextApiResponse } from "next";
 import { withApiSession } from "@libs/server/withSession";
 
-declare module "iron-session" {
-    interface IronSessionData {
-        user?: {
-            id: number;
-        };
-    }
-}
-
 async function handler(
     req: NextApiRequest,
     res: NextApiResponse<ResponseType>
 ) {
-    console.log(req.session.user);
-    const profile = await client.user.findUnique({
+    const { id } = req.query;
+    const product = await client.product.findUnique({
         where: {
-            id: req.session.user?.id,
+            id: +id.toString(),
+        },
+        include: {
+            user: {
+                select: {
+                    id: true,
+                    name: true,
+                    avatar: true,
+                },
+            },
         },
     });
-    res.json({
-        ok: true,
-        profile,
-    });
-    res.status(200).end();
+    console.log(product);
+    res.json({ ok: true, product });
 }
 export default withApiSession(withHandler({ methods: ["GET"], handler }));
