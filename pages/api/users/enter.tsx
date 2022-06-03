@@ -2,6 +2,10 @@ import client from "@libs/server/client";
 import withHandler, { ResponseType } from "@libs/server/withHandler";
 import { prisma } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
+import smtpTransport from "@libs/server/email";
+import twilio from "twilio";
+
+const twilioClient = twilio(process.env.TWILIO_SID, process.env.TWILIO_TOKEN);
 
 async function handler(
     req: NextApiRequest,
@@ -47,6 +51,36 @@ async function handler(
             },
         },
     });
+    if (phone) {
+        const message = await twilioClient.messages.create({
+            messagingServiceSid: process.env.TWILIO_SERVICE_SID,
+            to: process.env.TWILIO_TEST_PHONE!,
+            body: `Your login token is ${payload}`,
+        });
+        console.log(message);
+    }
+    if (email) {
+        const mailOptions = {
+            from: process.env.MAIL_ID,
+            to: email,
+            subject: "Nomad Carrot Authentication Email",
+            html: `<strong>Authentication Code : ${payload}</strong>`,
+        };
+        const result = await smtpTransport.sendMail(
+            mailOptions,
+            (error, responses) => {
+                if (error) {
+                    console.log(error);
+                    return null;
+                } else {
+                    console.log(responses);
+                    return null;
+                }
+            }
+        );
+        smtpTransport.close();
+        console.log(result);
+    }
     console.log(token);
     // if (email) {
     //     user = await client.user.findUnique({
