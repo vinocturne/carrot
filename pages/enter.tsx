@@ -8,7 +8,7 @@ import useMutation from "@libs/client/useMutation";
 import { useRouter } from "next/router";
 interface EnterForm {
     email?: string;
-    phone?: number;
+    phone?: string;
 }
 interface TokenForm {
     token: string;
@@ -131,7 +131,7 @@ const Enter: NextPage = () => {
                                     })}
                                     name="phone"
                                     label="Phone number"
-                                    type="number"
+                                    type="text"
                                     kind="phone"
                                     required
                                 />

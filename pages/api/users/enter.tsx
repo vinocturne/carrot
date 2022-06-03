@@ -12,7 +12,7 @@ async function handler(
     res: NextApiResponse<ResponseType>
 ) {
     const { phone, email } = req.body;
-    const user = phone ? { phone: +phone } : email ? { email } : null;
+    const user = phone ? { phone: phone } : email ? { email } : null;
     if (!user) return res.status(400).json({ ok: false });
     const payload = Math.floor(100000 + Math.random() * 900000) + "";
     //upsert 는 업데이트하거나 수정할때 많이 사용.
@@ -121,4 +121,4 @@ async function handler(
         ok: true,
     });
 }
-export default withHandler("POST", handler);
+export default withHandler({ method: "POST", handler, isPrivate: false });
