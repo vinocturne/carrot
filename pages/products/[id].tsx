@@ -2,11 +2,12 @@ import type { NextPage } from "next";
 import Button from "@components/button";
 import Layout from "@components/layout";
 import { useRouter } from "next/router";
-import useSWR from "swr";
+import useSWR, { useSWRConfig } from "swr";
 import Link from "next/link";
 import { Product, User } from "@prisma/client";
 import useMutation from "@libs/client/useMutation";
 import { cls } from "@libs/client/utils";
+import useUser from "@libs/client/useUser";
 interface ProductWithUser extends Product {
     user: User;
 }
@@ -18,14 +19,32 @@ interface ItemDetailResponse {
 }
 
 const ItemDetail: NextPage = () => {
+    const { user, isLoading } = useUser();
     const router = useRouter();
-    console.log(router.query);
-    const { data } = useSWR<ItemDetailResponse>(
+    const { mutate } = useSWRConfig();
+    //** Optimistic UI Update 낙관적으로 해당 행위가 이뤄질 것을 예상하여
+    //** 변경작업을 빠르게 진행할 수 있도록 SWR을 활용하여 수정이 가능.
+    //현재 화면에서의 데이터를 빠르게 변경하는 것을 Bound Mutation,
+    //다른 화면에서의 데이터를 변경할 수 있게 하는 것을 Unbound Mutations이라고 함.
+    //mutate()는 첫번째 인자로 변경될 데이터, 두번째 인자로 refetch 여부를 묻게된다.
+    //액션이 생기면 첫번째 인자로 받은 데이터로 데이터를 바꾼 후 refetch여부에 따라 데이터를 불러와 재검증을 진행.
+    const { data, mutate: boundMutate } = useSWR<ItemDetailResponse>(
         router.query.id ? `/api/products/${router.query.id}` : null
     );
     const [toggleFav] = useMutation(`/api/products/${router.query.id}/fav`);
     const onFavClick = () => {
-        toggleFav({});
+        if (!data) return;
+        //prev를 통해 mutation이전의 데이터를 받아올 수 있다. 이는 unboundMutation에서 다른 컴포넌트의 데이터를 받아올 때도 사용 가능.
+        boundMutate(
+            (prev) => prev && { ...prev, isLiked: !data.isLiked },
+            false
+        );
+        // toggleFav({});
+        //unboundMutation에서는 다른 컴포넌트의 데이터를 가지고 있지 않으므로
+        //prev를 활용하여 이전 데이터를 받아올 수 있도록 할 수 있음.
+        //SWR은 현재 컴포넌트에서 유저 훅에 접근하여 해당 데이터를 조작할 수 있음.
+        // mutate("/api/users/me")를 하게되면 단순 refetch만 진행.
+        // mutate("/api/users/me", (prev: any) => ({ ok: !prev.ok }), false);
     };
     return (
         <Layout canGoBack>
