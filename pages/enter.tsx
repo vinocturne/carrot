@@ -34,6 +34,7 @@ const Enter: NextPage = () => {
     } = useForm<TokenForm>();
     const [method, setMethod] = useState<"email" | "phone">("email");
     console.log(data);
+    console.log(process.env.DATABASE_URL);
     const onEmailClick = () => {
         reset();
         setMethod("email");
