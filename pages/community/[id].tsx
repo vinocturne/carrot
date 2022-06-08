@@ -80,8 +80,9 @@ const CommunityPostDetail: NextPage = () => {
     useEffect(() => {
         if (answerData && answerData.ok) {
             reset();
+            mutate();
         }
-    }, [answerData, reset]);
+    }, [answerData, reset, mutate]);
     console.log(data);
     return (
         <Layout canGoBack>
@@ -164,7 +165,7 @@ const CommunityPostDetail: NextPage = () => {
                                     {answer.user.name}
                                 </span>
                                 <span className="text-xs text-gray-500 block ">
-                                    {answer.createdAt}
+                                    {String(answer.createdAt)}
                                 </span>
                                 <p className="text-gray-700 mt-2">
                                     {answer.answer}
