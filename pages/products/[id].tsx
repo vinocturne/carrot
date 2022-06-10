@@ -21,6 +21,8 @@ interface ItemDetailResponse {
 const ItemDetail: NextPage = () => {
     const router = useRouter();
     const { mutate } = useSWRConfig();
+    const pathname = router.pathname;
+    const { user } = useUser({ pathname });
     //** Optimistic UI Update 낙관적으로 해당 행위가 이뤄질 것을 예상하여
     //** 변경작업을 빠르게 진행할 수 있도록 SWR을 활용하여 수정이 가능.
     //현재 화면에서의 데이터를 빠르게 변경하는 것을 Bound Mutation,
@@ -49,9 +51,15 @@ const ItemDetail: NextPage = () => {
         <Layout canGoBack>
             <div className="px-4  py-4">
                 <div className="mb-8">
-                    <div className="h-96 bg-slate-300" />
+                    <img
+                        src={`https://imagedelivery.net/IfkIh2vCOXio26cf7UQYpw/${data?.product.image}/public`}
+                        className="h-96 bg-slate-300"
+                    />
                     <div className="flex cursor-pointer py-3 border-t border-b items-center space-x-3">
-                        <div className="w-12 h-12 rounded-full bg-slate-300" />
+                        <img
+                            src={`https://imagedelivery.net/IfkIh2vCOXio26cf7UQYpw/${user?.avatar}/avatar`}
+                            className="w-12 h-12 rounded-full bg-slate-300"
+                        />
                         <div>
                             <p className="text-sm font-medium text-gray-700">
                                 {data?.product?.user?.name}
