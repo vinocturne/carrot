@@ -5,6 +5,8 @@ import Layout from "@components/layout";
 import useSWR from "swr";
 import { Post, User } from "@prisma/client";
 import useCoords from "@libs/client/useCoords";
+import { useState } from "react";
+import Pagination from "react-js-pagination";
 
 interface PostWithUser extends Post {
     user: User;
@@ -16,16 +18,21 @@ interface PostWithUser extends Post {
 
 interface PostResponse {
     ok: boolean;
+    total: number;
     posts: PostWithUser[];
 }
 
 const Community: NextPage = () => {
     const { latitude, longitude } = useCoords();
+    const [page, setPage] = useState(1);
     const { data } = useSWR<PostResponse>(
         latitude && longitude
-            ? `/api/posts?latitude=${latitude}&longitude=${longitude}`
+            ? `/api/posts?page=${page}&latitude=${latitude}&longitude=${longitude}`
             : null
     );
+    const handlePageChange = (page: number) => {
+        setPage(page);
+    };
     console.log(data);
     return (
         <Layout hasTabBar title="동네생활">
@@ -87,6 +94,15 @@ const Community: NextPage = () => {
                         </a>
                     </Link>
                 ))}
+                <Pagination
+                    activePage={page}
+                    itemsCountPerPage={10}
+                    totalItemsCount={data?.total as number}
+                    pageRangeDisplayed={5}
+                    prevPageText="‹"
+                    nextPageText="›"
+                    onChange={handlePageChange}
+                />
                 <FloatingButton href="/community/write">
                     <svg
                         className="w-6 h-6"

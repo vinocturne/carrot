@@ -2,22 +2,46 @@ import type { NextPage } from "next";
 import Link from "next/link";
 import FloatingButton from "@components/floating-button";
 import Layout from "@components/layout";
+import { Stream } from "@prisma/client";
+import useSWR from "swr";
+import Pagination from "react-js-pagination";
+import { useState } from "react";
 
-const Live: NextPage = () => {
+interface StreamsResponse {
+    ok: boolean;
+    total: number;
+    streams: Stream[];
+}
+
+const Streams: NextPage = () => {
+    const [page, setPage] = useState(1);
+    const { data } = useSWR<StreamsResponse>(`/api/streams?page=${page}`);
+    const handlePageChange = (page: number) => {
+        setPage(page);
+    };
     return (
         <Layout hasTabBar title="라이브">
             <div className=" divide-y-[1px] space-y-4">
-                {[1, 1, 1, 1, 1, 1, 1].map((_, i) => (
-                    <Link key={i} href={`/live/${i}`}>
+                {data?.streams?.map((stream) => (
+                    <Link key={stream.id} href={`/streams/${stream.id}`}>
                         <a className="pt-4 block  px-4">
                             <div className="w-full rounded-md shadow-sm bg-slate-300 aspect-video" />
                             <h1 className="text-2xl mt-2 font-bold text-gray-900">
-                                Galaxy S50
+                                {stream.name}
                             </h1>
                         </a>
                     </Link>
                 ))}
-                <FloatingButton href="/live/create">
+                <Pagination
+                    activePage={page}
+                    itemsCountPerPage={10}
+                    totalItemsCount={data?.total as number}
+                    pageRangeDisplayed={5}
+                    prevPageText="‹"
+                    nextPageText="›"
+                    onChange={handlePageChange}
+                />
+                <FloatingButton href="/streams/create">
                     <svg
                         className="w-6 h-6"
                         fill="none"
@@ -38,4 +62,4 @@ const Live: NextPage = () => {
     );
 };
 
-export default Live;
+export default Streams;

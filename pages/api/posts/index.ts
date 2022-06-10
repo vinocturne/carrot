@@ -31,10 +31,11 @@ async function handler(
     }
     if (req.method === "GET") {
         const {
-            query: { longitude, latitude },
+            query: { page, longitude, latitude },
         } = req;
         const parsedLatitude = parseFloat(latitude.toString());
         const parsedLongitude = parseFloat(longitude.toString());
+        const total = await client.post.count();
         const posts = await client.post.findMany({
             include: {
                 user: {
@@ -61,9 +62,12 @@ async function handler(
                     lte: parsedLongitude + 0.01,
                 },
             },
+            take: 10,
+            skip: (+page.toString() - 1) * 10,
         });
         res.json({
             ok: true,
+            total,
             posts,
         });
     }
