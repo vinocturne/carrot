@@ -7,6 +7,7 @@ import { useRouter } from "next/router";
 import useUser from "@libs/client/useUser";
 import { useEffect, useState } from "react";
 import useMutation from "@libs/client/useMutation";
+import Image from "next/image";
 
 interface EditProfileForm {
     name?: string;
@@ -96,7 +97,10 @@ const EditProfile: NextPage = () => {
             >
                 <div className="flex items-center space-x-3">
                     {avatarPreview ? (
-                        <img
+                        <Image
+                            alt="avatar"
+                            width={48}
+                            height={48}
                             src={avatarPreview}
                             className="w-14 h-14 rounded-full bg-slate-500"
                         />
