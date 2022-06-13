@@ -72,7 +72,14 @@ const LiveDetail: NextPage = () => {
     return (
         <Layout canGoBack>
             <div className="py-10 px-4  space-y-4">
-                <div className="w-full rounded-md shadow-sm bg-slate-300 aspect-video" />
+                {data?.stream.cloudflareId ? (
+                    <iframe
+                        src={`https://iframe.videodelivery.net/${data?.stream?.cloudflareId}`}
+                        className="w-full aspect-video rounded-md shadow-sm"
+                        allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
+                        allowFullScreen={true}
+                    ></iframe>
+                ) : null}
                 <div className="mt-5">
                     <h1 className="text-3xl font-bold text-gray-900">
                         {data?.stream?.name}
@@ -83,6 +90,21 @@ const LiveDetail: NextPage = () => {
                     <p className=" my-6 text-gray-700">
                         {data?.stream?.description}
                     </p>
+                    <div className="bg-orange-300 flex flex-col p-5 rounded-md overflow-x-scroll space-y-3">
+                        <span>Stream Keys (secret)</span>
+                        <span className="text-gray-600">
+                            <span className="font-medium text-gray-800">
+                                URL
+                            </span>
+                            :{data?.stream.cloudflareUrl}
+                        </span>
+                        <span className="text-gray-600">
+                            <span className="font-medium text-gray-800">
+                                Key
+                            </span>
+                            :{data?.stream.cloudflareKey}
+                        </span>
+                    </div>
                 </div>
                 <div>
                     <h2 className="text-2xl font-bold text-gray-900">
