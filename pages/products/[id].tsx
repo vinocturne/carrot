@@ -50,7 +50,7 @@ const ItemDetail: NextPage = () => {
         // mutate("/api/users/me", (prev: any) => ({ ok: !prev.ok }), false);
     };
     return (
-        <Layout canGoBack>
+        <Layout canGoBack seoTitle="Products Detail">
             <div className="px-4  py-4">
                 <div className="mb-8">
                     <div className="relative pb-80">
