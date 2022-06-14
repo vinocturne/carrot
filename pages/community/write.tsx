@@ -19,13 +19,14 @@ interface WriteResponse {
 }
 
 const Write: NextPage = () => {
-    const { latitude, longitude } = useCoords();
+    // const { latitude, longitude } = useCoords();
     const router = useRouter();
     const { register, handleSubmit } = useForm<WriteForm>();
     const [post, { loading, data }] = useMutation<WriteResponse>("/api/posts");
     const onValid = (data: WriteForm) => {
         if (loading) return;
-        post({ ...data, latitude, longitude });
+        post({ ...data });
+        // post({ ...data, latitude, longitude });
     };
     useEffect(() => {
         if (data && data.ok) {
