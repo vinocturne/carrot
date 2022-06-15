@@ -85,39 +85,39 @@ const Home: NextPage = () => {
     );
 };
 
-const Page: NextPage<{ products: ProductWithCount; total: number }> = ({
-    products,
-    total,
-}) => {
-    console.log(products);
-    return (
-        <SWRConfig
-            value={{
-                fallback: {
-                    "/api/products": {
-                        ok: true,
-                        products,
-                        total,
-                    },
-                },
-            }}
-        >
-            <Home />
-        </SWRConfig>
-    );
-};
+// const Page: NextPage<{ products: ProductWithCount; total: number }> = ({
+//     products,
+//     total,
+// }) => {
+//     console.log(products);
+//     return (
+//         <SWRConfig
+//             value={{
+//                 fallback: {
+//                     "/api/products": {
+//                         ok: true,
+//                         products,
+//                         total,
+//                     },
+//                 },
+//             }}
+//         >
+//             <Home />
+//         </SWRConfig>
+//     );
+// };
 
 //ssr은 데이터를 불러오는데 시간이 오래걸리면 화면의 호출 자체가 늦어진다.
 //데이터가 작다면 빠르게 보여지겠지만, 데이터가 수십만개가되고, 그것을 한 번에 불러와야한다면 아예 반응이 없는 것처럼 보일 수 있음.
-export async function getServerSideProps() {
-    const total = await client.product.count();
-    const products = await client.product.findMany({});
-    return {
-        props: {
-            products: JSON.parse(JSON.stringify(products)),
-            total,
-        },
-    };
-}
+// export async function getServerSideProps() {
+//     const total = await client.product.count();
+//     const products = await client.product.findMany({});
+//     return {
+//         props: {
+//             products: JSON.parse(JSON.stringify(products)),
+//             total,
+//         },
+//     };
+// }
 
-export default Page;
+export default Home;
