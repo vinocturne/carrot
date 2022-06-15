@@ -71,13 +71,17 @@ const ItemDetail: NextPage = () => {
                     </div>
 
                     <div className="flex cursor-pointer py-3 border-t border-b items-center space-x-3">
-                        <Image
-                            alt="avatar"
-                            width={48}
-                            height={48}
-                            src={`https://imagedelivery.net/IfkIh2vCOXio26cf7UQYpw/${data?.product.user.avatar}/avatar`}
-                            className="w-12 h-12 rounded-full bg-slate-300"
-                        />
+                        {data?.product.user.avatar ? (
+                            <div className="w-12 h-12 relative rounded-full bg-slate-300">
+                                <Image
+                                    alt="avatar"
+                                    layout="fill"
+                                    src={`https://imagedelivery.net/IfkIh2vCOXio26cf7UQYpw/${data?.product.user.avatar}/avatar`}
+                                />
+                            </div>
+                        ) : (
+                            <div className="w-12 h-12 rounded-full bg-slate-300" />
+                        )}
                         <div>
                             <p className="text-sm font-medium text-gray-700">
                                 {data?.product?.user?.name}
