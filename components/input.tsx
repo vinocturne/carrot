@@ -41,7 +41,7 @@ InputProps) {
             {kind === "price" ? (
                 <div className="rounded-md relative flex  items-center shadow-sm">
                     <div className="absolute left-0 pointer-events-none pl-3 flex items-center justify-center">
-                        <span className="text-gray-500 text-sm">$</span>
+                        <span className="text-gray-500 text-sm">￦</span>
                     </div>
                     <input
                         id={name}

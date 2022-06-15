@@ -36,6 +36,7 @@ model User {
   purchases Purchase[]
   record Record[]
   streams Stream[]
+  chats Chat[]
   messages Message[]
 }
 
@@ -62,6 +63,8 @@ model Product {
   sales Sale[]
   purchases Purchase[]
   records Record[]
+  chats         Chat[]
+  messages      Message[]
 }
 
 model Fav {
@@ -172,13 +175,34 @@ model Stream {
   cloudflareKey String @default("")
 }
 
+model Chat {
+  id        Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int
+  product   Product?  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId Int?
+  messages  Message[]
+  @@index([userId])
+  @@index([productId])
+}
+
 model Message {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId Int
-  message String @db.MediumText
-  stream Stream @relation(fields: [streamId], references: [id], onDelete: Cascade)
-  streamId Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int
+  message   String   @db.MediumText
+  stream    Stream?  @relation(fields: [streamId], references: [id], onDelete: Cascade)
+  streamId  Int?
+  product   Product? @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId Int?
+  chat      Chat?    @relation(fields: [chatId], references: [id], onDelete: Cascade)
+  chatId    Int?
+  @@index([userId])
+  @@index([streamId])
+  @@index([productId])
 }
+

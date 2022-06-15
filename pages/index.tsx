@@ -49,17 +49,6 @@ const Home: NextPage = () => {
                         image={product.image}
                     />
                 ))}
-                {data?.total ? (
-                    <Pagination
-                        activePage={page}
-                        itemsCountPerPage={10}
-                        totalItemsCount={data.total}
-                        pageRangeDisplayed={5}
-                        prevPageText="‹"
-                        nextPageText="›"
-                        onChange={handlePageChange}
-                    />
-                ) : null}
                 <FloatingButton href="/products/upload">
                     <svg
                         className="h-6 w-6"
@@ -78,6 +67,19 @@ const Home: NextPage = () => {
                     </svg>
                 </FloatingButton>
             </div>
+            {data?.total ? (
+                <div className="absolute bottom-[100px] translate-x-[-50%] left-[50%]">
+                    <Pagination
+                        activePage={page}
+                        itemsCountPerPage={10}
+                        totalItemsCount={data.total}
+                        pageRangeDisplayed={5}
+                        prevPageText="‹"
+                        nextPageText="›"
+                        onChange={handlePageChange}
+                    />
+                </div>
+            ) : null}
         </Layout>
     );
 };

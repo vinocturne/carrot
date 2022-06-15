@@ -67,7 +67,7 @@ const LiveDetail: NextPage = () => {
                 } as any),
             false
         );
-        // sendMessage(form);
+        sendMessage(form);
     };
     return (
         <Layout canGoBack seoTitle={`Streaming ${data?.stream?.name}`}>
@@ -115,6 +115,7 @@ const LiveDetail: NextPage = () => {
                             <Message
                                 key={message.id}
                                 message={message.message}
+                                avatarUrl={message.user.avatar}
                                 reversed={message.user.id === user?.id}
                             />
                         ))}
