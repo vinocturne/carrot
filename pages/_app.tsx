@@ -3,7 +3,7 @@ import type { AppProps } from "next/app";
 import { SWRConfig } from "swr";
 import useUser from "@libs/client/useUser";
 import { useRouter } from "next/router";
-
+import "./pagination.css";
 function MyApp({ Component, pageProps }: AppProps) {
     const { pathname } = useRouter();
     useUser({

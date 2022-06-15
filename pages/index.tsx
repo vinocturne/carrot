@@ -6,6 +6,8 @@ import useUser from "@libs/client/useUser";
 import Head from "next/head";
 import useSWR from "swr";
 import { Product } from "@prisma/client";
+import Pagination from "react-js-pagination";
+import { useState } from "react";
 
 export interface ProductWithCount extends Product {
     _count: {
@@ -15,12 +17,17 @@ export interface ProductWithCount extends Product {
 
 interface ProductResponse {
     ok: boolean;
+    total: number;
     products: ProductWithCount[];
 }
 
 const Home: NextPage = () => {
     // const { user, isLoading } = useUser();
-    const { data } = useSWR<ProductResponse>("/api/products");
+    const [page, setPage] = useState(1);
+    const { data } = useSWR<ProductResponse>(`/api/products?page=${page}`);
+    const handlePageChange = (page: number) => {
+        setPage(page);
+    };
     return (
         <Layout title="홈" hasTabBar>
             <Head>
@@ -36,6 +43,15 @@ const Home: NextPage = () => {
                         hearts={product._count.favs}
                     />
                 ))}
+                <Pagination
+                    activePage={page}
+                    itemsCountPerPage={10}
+                    totalItemsCount={data?.total as number}
+                    pageRangeDisplayed={5}
+                    prevPageText="‹"
+                    nextPageText="›"
+                    onChange={handlePageChange}
+                />
                 <FloatingButton href="/products/upload">
                     <svg
                         className="h-6 w-6"
