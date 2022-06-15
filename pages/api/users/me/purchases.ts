@@ -15,16 +15,29 @@ async function handler(
     req: NextApiRequest,
     res: NextApiResponse<ResponseType>
 ) {
-    console.log(req.session.user);
-    const profile = await client.user.findUnique({
+    const {
+        session: { user },
+    } = req;
+
+    const purchases = await client.purchase.findMany({
         where: {
-            id: req.session.user?.id,
+            userId: user?.id,
+        },
+        include: {
+            product: {
+                include: {
+                    _count: {
+                        select: {
+                            favs: true,
+                        },
+                    },
+                },
+            },
         },
     });
     res.json({
         ok: true,
-        profile,
+        purchases,
     });
-    res.status(200).end();
 }
 export default withApiSession(withHandler({ methods: ["GET"], handler }));

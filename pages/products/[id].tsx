@@ -19,7 +19,6 @@ interface ItemDetailResponse {
 }
 
 const ItemDetail: NextPage = () => {
-    const { user, isLoading } = useUser();
     const router = useRouter();
     const { mutate } = useSWRConfig();
     //** Optimistic UI Update 낙관적으로 해당 행위가 이뤄질 것을 예상하여
