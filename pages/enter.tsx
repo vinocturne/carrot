@@ -12,10 +12,10 @@ import dynamic from "next/dynamic";
 //next/dynamic을 이용한 dynamic import로 렌더링 되는 순간에 import 가 가능하기 때문에 성능 향상에 도움.
 //두번째 인자로 서버사이드렌더링 여부를 선택할 수 있음. 라이브러리들 중에는 서버사이드 렌더링 지원이 안될 때 ssr:false를 사용하는 식으로 사용이 가능해짐.
 //하지만 해당 컴포넌트가 무거우면 로딩이 오래 걸리는 경우가 있으니 사용에 주의.
-const Bs = dynamic(() => import("@components/bs"), {
-    ssr: false,
-    loading: () => <span>Loading a big component</span>,
-});
+// const Bs = dynamic(() => import("@components/bs"), {
+//     ssr: false,
+//     loading: () => <span>Loading a big component</span>,
+// });
 //큰 컴포넌트를 호출할 때 사용되는 옵션으로는 loading과 suspense가 있음.
 //loading은 랜더링 될 함수를 가지고, suspense는 boolean으로 선택한 뒤에 직접 컴포넌트에 <Suspense>를 사용하여 fallback을 넘겨주어 처리한다.
 //개인적으로는 loading을 사용하여 해당 컴포넌트 안에 로딩바 컴포넌트를 집어넣는 것이 깔끔할 것 같다.
@@ -163,7 +163,6 @@ const Enter: NextPage = () => {
                             ) : null}
                             {method === "phone" ? (
                                 <>
-                                    <Bs />
                                     <Button
                                         text={
                                             submitting
