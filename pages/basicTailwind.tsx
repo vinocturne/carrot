@@ -2,36 +2,37 @@ import type { NextPage } from "next";
 
 const Home: NextPage = () => {
     return (
-        // <div className="text-[9321px]"> //JIT으로 인해 지정된 범위를 넘어서는 픽셀들을 []를 활용하여 지정해줄 수 있다.
-        <div className="bg-slate-400 xl:place-content-center py-20 px-10 lg:grid-cols-2 xl:grid-cols-3 grid gap-10 min-h-screen">
-            <div className="dark:bg-black flex flex-col justify-center bg-white p-6 rounded-3xl shadow-xl">
-                <span className="font-semibold dark:text-white text-3xl">
-                    Select Item
-                </span>
-                <div className="flex justify-between my-2 ">
-                    <span className="text-gray-500 dark:text-gray-100">
-                        Grey Chair
-                    </span>
-                    <span className="font-semibold dark:text-white">$19</span>
-                </div>
-                <div className="flex justify-between my-2 ">
-                    <span className="text-gray-500 dark:text-gray-100">
-                        Grey Chair
-                    </span>
-                    <span className="font-semibold dark:text-white">$19</span>
-                </div>
+        <div className="bg-slate-400 py-20 px-10 grid gap-10 min-h-screen">
+            <div className="bg-white p-6 rounded-3xl shadow-xl">
+                <span className="font-semibold text-3xl">Select Item</span>
+                <ul>
+                    {[1, 2, 3, 4].map((i) => (
+                        <div
+                            key={i}
+                            className="flex justify-between my-2 odd:bg-blue-100 even:bg-yellow-100 first:bg-teal-100 last:bg-amber-100"
+                        >
+                            <span className="text-gray-500">Grey Chair</span>
+                            <span className="font-semibold">$19</span>
+                        </div>
+                    ))}
+                </ul>
+                {/* <ul>
+                    {["a", "b", "c", ""].map((c, i) => (
+                        <li className="bg-red-500 py-2 empty:hidden" key={i}>
+                            {c}
+                        </li>
+                    ))}
+                </ul> */}
                 <div className="flex justify-between mt-2 pt-2 border-t-2 border-dashed">
                     <span>Total</span>
                     <span className="font-semibold">$10</span>
                 </div>
-                <div className="flex justify-center items-center">
-                    <button className="mt-5 dark:bg-black dark:border-white dark:border dark:hover:bg-white dark:hover:text-black bg-blue-500 text-white p-3 rounded-xl w-2/4 text-center mx-auto hover:bg-teal-500 hover:text-black active:bg-yellow-500 focus:text-red-500">
-                        Checkout
-                    </button>
-                </div>
+                <button className="mt-5 bg-blue-500 text-white p-3 rounded-xl w-2/4 text-center mx-auto hover:bg-teal-500 hover:text-black active:bg-yellow-500 focus:text-red-500">
+                    Checkout
+                </button>
             </div>
-            <div className="bg-white dark:sm:hover:bg-red-50 overflow-hidden rounded-3xl shadow-xl group">
-                <div className="p-6 pb-14 xl:pb-52 portrait:bg-indigo-500 landscape:bg-teal-500">
+            <div className="bg-white overflow-hidden rounded-3xl shadow-xl group">
+                <div className="bg-blue-500 p-6 pb-14">
                     <span className="text-white text-2xl">Profile</span>
                 </div>
                 <div className="rounded-3xl p-6 relative bg-white -top-5">
@@ -42,7 +43,7 @@ const Home: NextPage = () => {
                             </span>
                             <span className="font-medium">340</span>
                         </div>
-                        <div className="h-24 w-24 xl:h-32 xl:w-32 bg-red-400 rounded-full group-hover:bg-red-300 transition-colors" />
+                        <div className="h-24 w-24 bg-red-400 rounded-full group-hover:bg-red-300 transition-colors" />
                         <div className="flex flex-col items-center">
                             <span className="text-sm text-gray-500">Spent</span>
                             <span className="font-medium">$340</span>
@@ -54,7 +55,7 @@ const Home: NextPage = () => {
                     </div>
                 </div>
             </div>
-            <div className="bg-white p-6 rounded-3xl shadow-xl lg:col-span-2 xl:col-span-1">
+            <div className="bg-white p-6 rounded-3xl shadow-xl">
                 <div className="flex mb-5 justify-between items-center">
                     <span>⬅️</span>
                     <div className="space-x-3">
