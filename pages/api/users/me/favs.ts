@@ -3,13 +3,13 @@ import withHandler, { ResponseType } from "@libs/server/withHandler";
 import { NextApiRequest, NextApiResponse } from "next";
 import { withApiSession } from "@libs/server/withSession";
 
-declare module "iron-session" {
-    interface IronSessionData {
-        user?: {
-            id: number;
-        };
-    }
-}
+// declare module "iron-session" {
+//     interface IronSessionData {
+//         user?: {
+//             id: number;
+//         };
+//     }
+// }
 
 async function handler(
     req: NextApiRequest,

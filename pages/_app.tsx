@@ -6,8 +6,6 @@ import { useRouter } from "next/router";
 import "./pagination.css";
 import Script from "next/script";
 function MyApp({ Component, pageProps }: AppProps) {
-    const { pathname } = useRouter();
-    useUser();
     return (
         <SWRConfig
             value={{
