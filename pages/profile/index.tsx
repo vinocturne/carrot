@@ -20,7 +20,6 @@ interface ReviewsResponse {
 }
 
 const Profile: NextPage = () => {
-    const { pathname } = useRouter();
     const { user } = useUser();
     const { data } = useSWR<ReviewsResponse>(
         typeof window === "undefined" ? null : "/api/reviews"
@@ -122,7 +121,7 @@ const Profile: NextPage = () => {
                         </a>
                     </Link>
                 </div>
-                {data?.reviews.map((review) => (
+                {data?.reviews?.map((review) => (
                     <div key={review.id} className="mt-12">
                         <div className="flex space-x-4 items-center">
                             <div className="w-12 h-12 rounded-full bg-slate-500" />
