@@ -51,6 +51,12 @@ async function handler(
             },
         },
     });
+    console.log("phone");
+    console.log(phone);
+    console.log("email");
+    console.log(email);
+    console.log("user");
+    console.log(user);
     if (phone) {
         const message = await twilioClient.messages.create({
             messagingServiceSid: process.env.TWILIO_SERVICE_SID,
@@ -58,7 +64,8 @@ async function handler(
             body: `Your login token is ${payload}`,
         });
         // console.log(message);
-    } else if (email) {
+    }
+    if (email) {
         const mailOptions = {
             from: process.env.MAIL_ID,
             to: email,
