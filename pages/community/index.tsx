@@ -17,26 +17,26 @@ interface PostWithUser extends Post {
 }
 
 interface PostResponse {
-    // ok: boolean;
-    // total: number;
+    ok: boolean;
+    total: number;
     posts: PostWithUser[];
 }
 
-const Community: NextPage<PostResponse> = ({ posts }) => {
-    // const { latitude, longitude } = useCoords();
-    // const [page, setPage] = useState(1);
-    // const { data } = useSWR<PostResponse>(
-    //     latitude && longitude
-    //         ? `/api/posts?page=${page}&latitude=${latitude}&longitude=${longitude}`
-    //         : null
-    // );
-    // const handlePageChange = (page: number) => {
-    //     setPage(page);
-    // };
+const Community: NextPage<PostResponse> = () => {
+    const { latitude, longitude } = useCoords();
+    const [page, setPage] = useState(1);
+    const { data } = useSWR<PostResponse>(
+        latitude !== null && longitude !== null
+            ? `/api/posts?page=${page}&latitude=${latitude}&longitude=${longitude}`
+            : `/api/posts?page=${page}`
+    );
+    const handlePageChange = (page: number) => {
+        setPage(page);
+    };
     return (
         <Layout hasTabBar title="동네생활" seoTitle="Community">
             <div className="space-y-4 divide-y-[2px]">
-                {posts?.map((post) => (
+                {data?.posts?.map((post) => (
                     <Link key={post.id} href={`/community/${post.id}`}>
                         <a className="flex cursor-pointer flex-col pt-4 items-start">
                             <span className="flex ml-4 items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
@@ -93,15 +93,17 @@ const Community: NextPage<PostResponse> = ({ posts }) => {
                         </a>
                     </Link>
                 ))}
-                {/* <Pagination
-                    activePage={page}
-                    itemsCountPerPage={10}
-                    totalItemsCount={data?.total as number}
-                    pageRangeDisplayed={5}
-                    prevPageText="‹"
-                    nextPageText="›"
-                    onChange={handlePageChange}
-                /> */}
+                {data?.total ? (
+                    <Pagination
+                        activePage={page}
+                        itemsCountPerPage={10}
+                        totalItemsCount={data?.total}
+                        pageRangeDisplayed={5}
+                        prevPageText="‹"
+                        nextPageText="›"
+                        onChange={handlePageChange}
+                    />
+                ) : null}
                 <FloatingButton href="/community/write">
                     <svg
                         className="w-6 h-6"
@@ -127,18 +129,18 @@ const Community: NextPage<PostResponse> = ({ posts }) => {
 //서버사이드 렌더링은 데이터들이 한 번에 표시되는 대신 데이터가 크면 오래 기다려야하고
 //api를 활용해 데이터를 불러오면 불러오기까지 로딩페이지를 보여주어야하지만
 //ISR을 활용하면 로딩없이 바로 최신의 데이터를 표시할 수 있다.
-export async function getStaticProps() {
-    console.log("Building Community Statically");
-    const posts = await client.post.findMany({ include: { user: true } });
-    return {
-        props: {
-            posts: JSON.parse(JSON.stringify(posts)),
-        },
-        //getStaticProps는 빌드 시 한 번만 생성되지만, ISR을 사용하게 된다면 백그라운드에서 몇번이고 다시 실행 가능
-        //이를 활용해 일정 주기로 html을 계속 재생성해주면 유저는 로딩 없이 최신 데이터를 받아볼 수 있음.
-        //해당 기능을 정상적으로 테스트하기 위해서는 build 후 npm run start를 통해 프로덕트 모드로 실행해야 확인 가능하다.
-        // revalidate: 20,
-    };
-}
+// export async function getStaticProps() {
+//     console.log("Building Community Statically");
+//     const posts = await client.post.findMany({ include: { user: true } });
+//     return {
+//         props: {
+//             posts: JSON.parse(JSON.stringify(posts)),
+//         },
+//         //getStaticProps는 빌드 시 한 번만 생성되지만, ISR을 사용하게 된다면 백그라운드에서 몇번이고 다시 실행 가능
+//         //이를 활용해 일정 주기로 html을 계속 재생성해주면 유저는 로딩 없이 최신 데이터를 받아볼 수 있음.
+//         //해당 기능을 정상적으로 테스트하기 위해서는 build 후 npm run start를 통해 프로덕트 모드로 실행해야 확인 가능하다.
+//         // revalidate: 20,
+//     };
+// }
 
 export default Community;

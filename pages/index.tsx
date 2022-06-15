@@ -33,6 +33,7 @@ const Home: NextPage = () => {
     const handlePageChange = (page: number) => {
         setPage(page);
     };
+    console.log(data);
     return (
         <Layout title="홈" hasTabBar seoTitle="Home">
             <Head>
@@ -49,17 +50,6 @@ const Home: NextPage = () => {
                         image={product.image}
                     />
                 ))}
-                {data?.total ? (
-                    <Pagination
-                        activePage={page}
-                        itemsCountPerPage={10}
-                        totalItemsCount={data.total}
-                        pageRangeDisplayed={5}
-                        prevPageText="‹"
-                        nextPageText="›"
-                        onChange={handlePageChange}
-                    />
-                ) : null}
                 <FloatingButton href="/products/upload">
                     <svg
                         className="h-6 w-6"
@@ -78,6 +68,19 @@ const Home: NextPage = () => {
                     </svg>
                 </FloatingButton>
             </div>
+            {data?.total ? (
+                <div>
+                    <Pagination
+                        activePage={page}
+                        itemsCountPerPage={10}
+                        totalItemsCount={data?.total}
+                        pageRangeDisplayed={5}
+                        prevPageText="‹"
+                        nextPageText="›"
+                        onChange={handlePageChange}
+                    />
+                </div>
+            ) : null}
         </Layout>
     );
 };
