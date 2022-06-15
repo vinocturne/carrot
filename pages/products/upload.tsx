@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import { Product } from "@prisma/client";
 import { useRouter } from "next/router";
 import Image from "next/image";
+import useUser from "@libs/client/useUser";
 
 interface UploadProductForm {
     name: string;
@@ -24,6 +25,7 @@ interface UploadProductMutation {
 
 const Upload: NextPage = () => {
     const router = useRouter();
+    const { user, isLoading } = useUser();
     const { register, handleSubmit, watch } = useForm<UploadProductForm>();
     const [uploadProduct, { loading, data }] = useMutation<
         UploadProductMutation

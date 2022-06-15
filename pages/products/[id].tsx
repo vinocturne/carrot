@@ -26,8 +26,7 @@ interface ItemDetailResponse {
 const ItemDetail: NextPage = () => {
     const { mutate } = useSWRConfig();
     const router = useRouter();
-    const pathname = router.pathname;
-    const { user } = useUser({ pathname });
+    const { user } = useUser();
     const { data, mutate: boundMutate } = useSWR<ItemDetailResponse>(
         router.query.id ? `/api/products/${router.query.id}` : null
     );

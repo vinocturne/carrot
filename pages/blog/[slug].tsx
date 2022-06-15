@@ -1,4 +1,5 @@
 import Layout from "@components/layout";
+import useUser from "@libs/client/useUser";
 import { readdirSync } from "fs";
 import matter from "gray-matter";
 import { GetStaticProps, NextPage } from "next";
@@ -7,6 +8,7 @@ import remarkParse from "remark-parse";
 import { unified } from "unified";
 
 const Post: NextPage<{ post: string; data: any }> = ({ post, data }) => {
+    const { user, isLoading } = useUser();
     return (
         <Layout canGoBack seoTitle={data.title} title={data.title}>
             <div

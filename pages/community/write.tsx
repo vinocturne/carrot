@@ -8,6 +8,7 @@ import { useEffect } from "react";
 import { Post } from "@prisma/client";
 import { useRouter } from "next/router";
 import useCoords from "@libs/client/useCoords";
+import useUser from "@libs/client/useUser";
 
 interface WriteForm {
     question: string;
@@ -19,6 +20,7 @@ interface WriteResponse {
 }
 
 const Write: NextPage = () => {
+    const { user, isLoading } = useUser();
     const { latitude, longitude } = useCoords();
     const router = useRouter();
     const { register, handleSubmit } = useForm<WriteForm>();

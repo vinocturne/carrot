@@ -1,4 +1,5 @@
 import Layout from "@components/layout";
+import useUser from "@libs/client/useUser";
 import { readdirSync, readFileSync } from "fs";
 import matter from "gray-matter";
 import { NextPage } from "next";
@@ -12,6 +13,7 @@ interface Post {
 }
 
 const Blog: NextPage<{ posts: Post[] }> = ({ posts }) => {
+    const { user, isLoading } = useUser();
     return (
         <Layout title="Blog" seoTitle="Blog">
             <h1 className="font-semibold text-lg text-center mt-5 mb-10">
