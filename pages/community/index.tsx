@@ -8,6 +8,7 @@ import useCoords from "@libs/client/useCoords";
 import { useState } from "react";
 import Pagination from "react-js-pagination";
 import client from "@libs/server/client";
+import useUser from "@libs/client/useUser";
 interface PostWithUser extends Post {
     user: User;
     _count: {
@@ -23,6 +24,7 @@ interface PostResponse {
 }
 
 const Community: NextPage<PostResponse> = () => {
+    const { user, isLoading } = useUser();
     const { latitude, longitude } = useCoords();
     const [page, setPage] = useState(1);
     const { data } = useSWR<PostResponse>(

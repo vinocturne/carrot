@@ -23,8 +23,7 @@ interface ChatResponse {
 }
 
 const Chats: NextPage = () => {
-    const { pathname } = useRouter();
-    const { user } = useUser({ pathname });
+    const { user } = useUser();
     const { data } = useSWR<ChatResponse>(`/api/chats`);
     console.log(data);
     return (

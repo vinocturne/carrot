@@ -52,8 +52,7 @@ const ChatDetail: NextPage = () => {
 
     // }
     const router = useRouter();
-    const pathname = router.pathname;
-    const { user, isLoading } = useUser({ pathname });
+    const { user, isLoading } = useUser();
     const { register, handleSubmit, reset } = useForm<ChatForm>();
     const { data, mutate } = useSWR<ChatResponse>(
         router.query.id ? `/api/chats/${router.query.id}` : null,

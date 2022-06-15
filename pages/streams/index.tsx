@@ -7,6 +7,7 @@ import useSWR from "swr";
 import Pagination from "react-js-pagination";
 import { useState } from "react";
 import Image from "next/image";
+import useUser from "@libs/client/useUser";
 
 interface StreamsResponse {
     ok: boolean;
@@ -15,6 +16,7 @@ interface StreamsResponse {
 }
 
 const Streams: NextPage = () => {
+    const { user, isLoading } = useUser();
     const [page, setPage] = useState(1);
     const { data } = useSWR<StreamsResponse>(`/api/streams?page=${page}`);
     const handlePageChange = (page: number) => {

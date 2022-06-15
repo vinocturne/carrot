@@ -34,7 +34,7 @@ interface MessageForm {
 const LiveDetail: NextPage = () => {
     const router = useRouter();
     const pathname = router.pathname;
-    const { user } = useUser({ pathname });
+    const { user } = useUser();
     const { register, handleSubmit, reset } = useForm<MessageForm>();
     const { data, mutate } = useSWR<StreamResponse>(
         router.query.id ? `/api/streams/${router.query.id}` : null,

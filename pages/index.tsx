@@ -27,7 +27,7 @@ const Home: NextPage = () => {
     //     products,
     //     total,
     // }) => {
-    // const { user, isLoading } = useUser();
+    const { user, isLoading } = useUser();
     const [page, setPage] = useState(1);
     const { data } = useSWR<ProductResponse>(`/api/products?page=${page}`);
     const handlePageChange = (page: number) => {

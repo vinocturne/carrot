@@ -9,6 +9,7 @@ import useMutation from "@libs/client/useMutation";
 import { cls } from "../../libs/client/utils";
 import { useForm } from "react-hook-form";
 import { useEffect } from "react";
+import useUser from "@libs/client/useUser";
 
 interface AnswerWithUser extends Answer {
     user: User;
@@ -39,6 +40,7 @@ interface AnswerResponse {
 }
 
 const CommunityPostDetail: NextPage = () => {
+    const { user, isLoading } = useUser();
     const router = useRouter();
     const { register, handleSubmit, reset } = useForm<AnswerForm>();
     const { data, mutate } = useSWR<CommunityPostResponse>(

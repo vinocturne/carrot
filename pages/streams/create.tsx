@@ -8,6 +8,7 @@ import useMutation from "@libs/client/useMutation";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { Stream } from "@prisma/client";
+import useUser from "@libs/client/useUser";
 
 interface CreateForm {
     name: string;
@@ -22,6 +23,7 @@ interface CreateResponse {
 
 const Create: NextPage = () => {
     const router = useRouter();
+    const { user, isLoading } = useUser();
     const [createStream, { data, loading }] = useMutation<CreateResponse>(
         `/api/streams`
     );
