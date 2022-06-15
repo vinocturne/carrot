@@ -9,14 +9,15 @@ async function handler(
 ) {
     if (req.method === "POST") {
         const {
-            body: { question, latitude, longitude },
+            body: { question },
+            // body: { question, latitude, longitude },
             session: { user },
         } = req;
         const post = await client.post.create({
             data: {
                 question,
-                latitude,
-                longitude,
+                // latitude,
+                // longitude,
                 user: {
                     connect: {
                         id: user?.id,
@@ -24,6 +25,7 @@ async function handler(
                 },
             },
         });
+        await res.unstable_revalidate("/community");
         res.json({
             ok: true,
             post,

@@ -1,4 +1,4 @@
-import type { NextPage } from "next";
+import type { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import Button from "@components/button";
 import Layout from "@components/layout";
 import { useRouter } from "next/router";
@@ -9,6 +9,7 @@ import useMutation from "@libs/client/useMutation";
 import { cls } from "@libs/client/utils";
 import useUser from "@libs/client/useUser";
 import Image from "next/image";
+import client from "@libs/server/client";
 
 interface ProductWithUser extends Product {
     user: User;
@@ -20,7 +21,11 @@ interface ItemDetailResponse {
     isLiked: boolean;
 }
 
-const ItemDetail: NextPage = () => {
+const ItemDetail: NextPage<ItemDetailResponse> = ({
+    product,
+    relatedProducts,
+    isLiked,
+}) => {
     const router = useRouter();
     const { mutate } = useSWRConfig();
     const pathname = router.pathname;
@@ -57,7 +62,7 @@ const ItemDetail: NextPage = () => {
                         <Image
                             alt="product"
                             layout="fill"
-                            src={`https://imagedelivery.net/IfkIh2vCOXio26cf7UQYpw/${data?.product.image}/public`}
+                            src={`https://imagedelivery.net/IfkIh2vCOXio26cf7UQYpw/${product.image}/public`}
                             className="h-96 bg-slate-300 object-cover"
                         />
                     </div>
@@ -72,11 +77,9 @@ const ItemDetail: NextPage = () => {
                         />
                         <div>
                             <p className="text-sm font-medium text-gray-700">
-                                {data?.product?.user?.name}
+                                {product?.user?.name}
                             </p>
-                            <Link
-                                href={`/users/profiles/${data?.product?.user?.id}`}
-                            >
+                            <Link href={`/users/profiles/${product?.user?.id}`}>
                                 <a className="text-xs font-medium text-gray-500">
                                     View profile &rarr;
                                 </a>
@@ -85,13 +88,13 @@ const ItemDetail: NextPage = () => {
                     </div>
                     <div className="mt-5">
                         <h1 className="text-3xl font-bold text-gray-900">
-                            {data?.product?.name}
+                            {product?.name}
                         </h1>
                         <span className="text-2xl block mt-3 text-gray-900">
-                            ${data?.product?.price}
+                            ${product?.price}
                         </span>
                         <p className=" my-6 text-gray-700">
-                            {data?.product?.description}
+                            {product?.description}
                         </p>
                         <div className="flex items-center justify-between space-x-2">
                             <Button large text="Talk to seller" />
@@ -99,12 +102,12 @@ const ItemDetail: NextPage = () => {
                                 onClick={onFavClick}
                                 className={cls(
                                     "p-3 rounded-md flex items-center justify-center hover:bg-gray-100 ",
-                                    data?.isLiked
+                                    isLiked
                                         ? "text-red-400  hover:text-red-500"
                                         : "text-gray-400  hover:text-gray-500"
                                 )}
                             >
-                                {data?.isLiked ? (
+                                {isLiked ? (
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
                                         className="h-6 w-6"
@@ -143,7 +146,7 @@ const ItemDetail: NextPage = () => {
                         Similar items
                     </h2>
                     <div className=" mt-6 grid grid-cols-2 gap-4">
-                        {data?.relatedProducts?.map((product) => (
+                        {relatedProducts?.map((product) => (
                             <Link
                                 key={product?.id}
                                 href={`/products/${product.id}`}
@@ -164,6 +167,76 @@ const ItemDetail: NextPage = () => {
             </div>
         </Layout>
     );
+};
+
+export const getStaticPaths: GetStaticPaths = () => {
+    return {
+        paths: [],
+        fallback: "blocking",
+        //getStaticPaths에서는 정적 페이지로 만들어놓을 대상의 paths를 지정해놓는데,
+        //db에서 데이터를 불러와야하는 상품 페이지의 경우 전체 페이지를 다 만드는 것이 효율적이지 못하다.
+        //이에 paths를 빈 상태로 보내고, 유저가 방문을 하게되었을 때
+        //만약 그 페이지에 해당하는 html이 없다면, 유저를 잠시 기다리게하고 해당 페이지를 백그라운드에서 생성하여 넘겨준다.
+        //첫번째 요청 이후 방문한 사람의 경우 이미 html이 존재하니 기다리지 않아도 된다.
+    };
+};
+
+//getStaticProps를 사용할 때에는 어떤 것을 html로 만들것인지 확인해야하기 때문에 getStaticPaths가 필수가되는데,
+//상품란의 경우 DB를통해 해당 데이터들을 받아오기 때문에 Blog 처럼 명확한 패스를 지정해줄 수 없음.
+export const getStaticProps: GetStaticProps = async (ctx) => {
+    if (!ctx?.params?.id) {
+        return {
+            props: {},
+        };
+    }
+    const product = await client.product.findUnique({
+        where: {
+            id: +ctx.params.id.toString(),
+        },
+        include: {
+            user: {
+                select: {
+                    id: true,
+                    name: true,
+                    avatar: true,
+                },
+            },
+        },
+    });
+    const terms = product?.name.split(" ").map((word) => ({
+        name: {
+            contains: word,
+        },
+    }));
+    const relatedProducts = await client.product.findMany({
+        where: {
+            OR: terms,
+            AND: {
+                id: {
+                    not: product?.id,
+                },
+            },
+        },
+    });
+    const isLiked = false;
+    // Boolean(
+    //     await client.fav.findFirst({
+    //         where: {
+    //             productId: product?.id,
+    //             userId: user?.id,
+    //         },
+    //         select: {
+    //             id: true,
+    //         },
+    //     })
+    // );
+    return {
+        props: {
+            product: JSON.parse(JSON.stringify(product)),
+            relatedProducts: JSON.parse(JSON.stringify(relatedProducts)),
+            isLiked,
+        },
+    };
 };
 
 export default ItemDetail;

@@ -21,14 +21,9 @@ const Post: NextPage<{ post: string; data: any }> = ({ post, data }) => {
 //얼마나 많은 페이지를 빌드할지 명시하여야 함
 //이를 위해 path를 지정해주는데, 이 때 getStaticPaths()를 사용
 export function getStaticPaths() {
-    const files = readdirSync("./posts").map((file) => {
-        const [name, extension] = file.split(".");
-        return { params: { slug: name } };
-    });
-    console.log(files);
     return {
-        paths: files,
-        fallback: false,
+        paths: [],
+        fallback: "blocking",
     };
 }
 //즉 동적 url을 사용하면서 getStaticProps를 사용하기 위해서는 getStaticPaths를 사용해야함

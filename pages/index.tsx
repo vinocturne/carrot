@@ -82,10 +82,6 @@ const Home: NextPage = () => {
     );
 };
 
-//SSR 사용 시 SWR사용이 되지 않기 때문에, Home 컴포넌트를 감싸주는 컴포넌트를 하나 더 만든 뒤, SWRConfig로 감싸준다.
-//value에는 fallback을 지정할 수 있는데, 호출하려는 API 주소가 key가되어, 반환 값을 적어주면 정상적으로 받을 수 있다.
-//다만 현재는 서버사이드에서 보내는 products에는 count가 포함되어져있지 않기 때문에 데이터만 우선적으로 받고,
-//본래 Home 컴포넌트가 렌더링 되었을 때 api 호출을 통해 count를 포함한 정상적인 데이터 호출이 가능하다.
 const Page: NextPage<{ products: ProductWithCount; total: number }> = ({
     products,
     total,
@@ -108,7 +104,8 @@ const Page: NextPage<{ products: ProductWithCount; total: number }> = ({
     );
 };
 
-//일반적으로는 서버단에서 api를 불러오면 SWR을 사용하지 않기 때문에 다른 탭에서 돌아올 때 캐시된 데이터를 사용할 수 없어진다.
+//ssr은 데이터를 불러오는데 시간이 오래걸리면 화면의 호출 자체가 늦어진다.
+//데이터가 작다면 빠르게 보여지겠지만, 데이터가 수십만개가되고, 그것을 한 번에 불러와야한다면 아예 반응이 없는 것처럼 보일 수 있음.
 export async function getServerSideProps() {
     const total = await client.product.count();
     const products = await client.product.findMany({});

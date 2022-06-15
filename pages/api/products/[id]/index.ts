@@ -42,8 +42,6 @@ async function handler(
             },
         },
     });
-    console.log(relatedProducts);
-    console.log(terms);
     const isLiked = Boolean(
         await client.fav.findFirst({
             where: {
