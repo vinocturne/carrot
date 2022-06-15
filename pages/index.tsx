@@ -33,6 +33,7 @@ const Home: NextPage = () => {
     const handlePageChange = (page: number) => {
         setPage(page);
     };
+    console.log(data);
     return (
         <Layout title="홈" hasTabBar seoTitle="Home">
             <Head>
@@ -68,11 +69,11 @@ const Home: NextPage = () => {
                 </FloatingButton>
             </div>
             {data?.total ? (
-                <div className="absolute bottom-[100px] translate-x-[-50%] left-[50%]">
+                <div>
                     <Pagination
                         activePage={page}
                         itemsCountPerPage={10}
-                        totalItemsCount={data.total}
+                        totalItemsCount={data?.total}
                         pageRangeDisplayed={5}
                         prevPageText="‹"
                         nextPageText="›"
