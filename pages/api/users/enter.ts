@@ -4,6 +4,7 @@ import { prisma } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
 import smtpTransport from "@libs/server/email";
 import twilio from "twilio";
+import nodemailerMailgun from "@libs/server/email";
 
 const twilioClient = twilio(process.env.TWILIO_SID, process.env.TWILIO_TOKEN);
 
@@ -66,26 +67,38 @@ async function handler(
         // console.log(message);
     }
     if (email) {
+        // const mailOptions = {
+        //     from: process.env.MAIL_ID,
+        //     to: email,
+        //     subject: "Nomad Carrot Authentication Email",
+        //     html: `<strong>Authentication Code : ${payload}</strong>`,
+        // };
+        // const result = await smtpTransport.sendMail(
+        //     mailOptions,
+        //     (error, responses) => {
+        //         if (error) {
+        //             console.log(error);
+        //             return null;
+        //         } else {
+        //             console.log(responses);
+        //             return null;
+        //         }
+        //     }
+        // );
+        // smtpTransport.close();
         const mailOptions = {
-            from: process.env.MAIL_ID,
+            from: "postmaster@mg.mangakiss.jp",
             to: email,
             subject: "Nomad Carrot Authentication Email",
             html: `<strong>Authentication Code : ${payload}</strong>`,
         };
-        const result = await smtpTransport.sendMail(
-            mailOptions,
-            (error, responses) => {
-                if (error) {
-                    console.log(error);
-                    return null;
-                } else {
-                    console.log(responses);
-                    return null;
-                }
+        await nodemailerMailgun.sendMail(mailOptions, (err, info) => {
+            if (err) {
+                console.log(err);
+            } else {
+                console.log(info);
             }
-        );
-        smtpTransport.close();
-        // console.log(result);
+        });
     }
     console.log(token);
     // if (email) {
