@@ -94,6 +94,7 @@ async function handler(
             subject: "Nomad Carrot Authentication Email",
             html: `<strong>Authentication Code : ${payload}</strong>`,
         };
+        console.log("email block in!");
         const mail = await transporter.sendMail(mailOptions, (err, info) => {
             if (err) {
                 console.log(err);
