@@ -94,25 +94,28 @@ async function handler(
             subject: "Nomad Carrot Authentication Email",
             html: `<strong>Authentication Code : ${payload}</strong>`,
         };
-        console.log("email block in!");
-        const mail = await transporter.sendMail(mailOptions, (err, info) => {
-            if (err) {
-                console.log(err);
-            } else {
-                console.log(info);
-            }
-        });
-
-        // const mail = await nodemailerMailgun.sendMail(
-        //     mailOptions,
-        //     (err, info) => {
-        //         if (err) {
-        //             console.log(err);
-        //         } else {
-        //             console.log(info);
-        //         }
+        // await new Promise((resolve, reject) => {
+        //     transporter.send
+        // })
+        // const mail = await transporter.sendMail(mailOptions, (err, info) => {
+        //     if (err) {
+        //         console.log(err);
+        //     } else {
+        //         console.log(info);
         //     }
-        // );
+        // });
+
+        await new Promise((resolve, reject) => {
+            nodemailerMailgun.sendMail(mailOptions, (err, info) => {
+                if (err) {
+                    console.log(err);
+                    reject(err);
+                } else {
+                    console.log(info);
+                    resolve(info);
+                }
+            });
+        });
         // console.log(mail);
     }
     console.log(token);
