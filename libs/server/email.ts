@@ -1,5 +1,5 @@
 import nodemailer from "nodemailer";
-// import mailgun from "nodemailer-mailgun-transport";
+import mailgun from "nodemailer-mailgun-transport";
 // import Mailgun from "mailgun.js";
 
 // const smtpTransport = nodemailer.createTransport({
@@ -15,28 +15,28 @@ import nodemailer from "nodemailer";
 //     },
 // });
 
-// interface AuthOptions {
-//     auth: {
-//         api_key: string;
-//         domain: string;
-//     };
-// }
-
-// const auth: AuthOptions = {
-//     auth: {
-//         api_key: process.env.MAILGUN_PRIVATE_API!,
-//         domain: process.env.MAILGUN_DOMAIN!,
-//     },
-// };
-// const nodemailerMailgun = nodemailer.createTransport(mailgun(auth));
-
-let transporter = nodemailer.createTransport({
-    host: "smtp.mailgun.org",
-    port: 587,
+interface AuthOptions {
     auth: {
-        user: process.env.MAILGUN_SMTP_ID,
-        pass: process.env.MAILGUN_SMTP_PASS,
-    },
-});
+        api_key: string;
+        domain: string;
+    };
+}
 
-export default transporter;
+const auth: AuthOptions = {
+    auth: {
+        api_key: process.env.MAILGUN_PRIVATE_API!,
+        domain: process.env.MAILGUN_DOMAIN!,
+    },
+};
+const nodemailerMailgun = nodemailer.createTransport(mailgun(auth));
+
+// let transporter = nodemailer.createTransport({
+//     host: "smtp.mailgun.org",
+//     port: 587,
+//     auth: {
+//         user: process.env.MAILGUN_SMTP_ID,
+//         pass: process.env.MAILGUN_SMTP_PASS,
+//     },
+// });
+
+export default nodemailerMailgun;
