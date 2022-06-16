@@ -5,6 +5,8 @@ import { NextApiRequest, NextApiResponse } from "next";
 import smtpTransport from "@libs/server/email";
 import twilio from "twilio";
 import nodemailerMailgun from "@libs/server/email";
+import main from "@libs/server/email";
+import transporter from "../../../libs/server/email";
 
 const twilioClient = twilio(process.env.TWILIO_SID, process.env.TWILIO_TOKEN);
 
@@ -92,13 +94,25 @@ async function handler(
             subject: "Nomad Carrot Authentication Email",
             html: `<strong>Authentication Code : ${payload}</strong>`,
         };
-        await nodemailerMailgun.sendMail(mailOptions, (err, info) => {
+        const mail = await transporter.sendMail(mailOptions, (err, info) => {
             if (err) {
                 console.log(err);
             } else {
                 console.log(info);
             }
         });
+
+        // const mail = await nodemailerMailgun.sendMail(
+        //     mailOptions,
+        //     (err, info) => {
+        //         if (err) {
+        //             console.log(err);
+        //         } else {
+        //             console.log(info);
+        //         }
+        //     }
+        // );
+        // console.log(mail);
     }
     console.log(token);
     // if (email) {
