@@ -28,8 +28,6 @@ async function handler(
     console.log(isVerified);
     console.log("-------------------");
     console.log("webhook come here");
-    console.log("req");
-    console.log(req);
     return res.json({
         ok: true,
     });
