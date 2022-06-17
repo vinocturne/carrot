@@ -1,6 +1,5 @@
 import nodemailer from "nodemailer";
 import mailgun from "nodemailer-mailgun-transport";
-
 interface AuthOptions {
     auth: {
         api_key: string;
