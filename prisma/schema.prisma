@@ -228,14 +228,8 @@ model EmailEvent {
   id        Int      @id @default(autoincrement())
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    Int
-  event  EmailEventList
+  event  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   @@index([userId])
-}
-
-enum EmailEventList {
-  clicked
-  delivered
-  opened
 }
