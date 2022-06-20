@@ -235,7 +235,7 @@ model EmailEvent {
 }
 
 enum EmailEventList {
-  Clicked
-  Delivered
-  Opened
+  clicked
+  delivered
+  opened
 }
