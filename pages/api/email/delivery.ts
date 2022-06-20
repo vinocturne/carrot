@@ -29,7 +29,7 @@ async function handler(
     const signingKey = process.env.MAILGUN_WEBHOOK_SIGNING_KEY!;
     const isVerified = verify({ signingKey, timestamp, token, signature });
     if (isVerified) {
-        const user = await client.user.findUnique({
+        const user = await client.user.findFirst({
             where: {
                 email,
             },

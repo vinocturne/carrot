@@ -29,7 +29,7 @@ async function handler(
     console.log(req.body);
     const isVerified = verify({ signingKey, timestamp, token, signature });
     if (isVerified) {
-        const user = await client.user.findUnique({
+        const user = await client.user.findFirst({
             where: {
                 email,
             },
