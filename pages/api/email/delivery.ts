@@ -1,5 +1,6 @@
 import withHandler, { ResponseType } from "@libs/server/withHandler";
 import { NextApiRequest, NextApiResponse } from "next";
+import client from "@libs/server/client";
 import crypto from "crypto";
 interface Signature {
     signingKey: string;
@@ -28,7 +29,7 @@ async function handler(
     const signingKey = process.env.MAILGUN_WEBHOOK_SIGNING_KEY!;
     const isVerified = verify({ signingKey, timestamp, token, signature });
     if (isVerified) {
-        const emailDb = await client?.emailEvent.create({
+        const emailDb = await client.emailEvent.create({
             data: {
                 event,
                 user: {
