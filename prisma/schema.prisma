@@ -38,7 +38,7 @@ model User {
   streams Stream[]
   chats Chat[]
   messages Message[]
-  emailDelivery EmailDelivery[]
+  emailEvent EmailEvent[]
 }
 
 model Token {
