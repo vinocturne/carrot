@@ -38,6 +38,7 @@ model User {
   streams Stream[]
   chats Chat[]
   messages Message[]
+  emailDelivery EmailDelivery[]
 }
 
 model Token {
@@ -221,4 +222,20 @@ model Message {
   @@index([userId])
   @@index([streamId])
   @@index([productId])
+}
+
+model Email {
+  id        Int      @id @default(autoincrement())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int
+  event EmailEvent
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@index([userId])
+}
+
+enum EmailEvent {
+  Clicked
+  Delivered
+  Opened
 }

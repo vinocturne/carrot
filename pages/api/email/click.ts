@@ -23,6 +23,7 @@ async function handler(
 ) {
     const { timestamp, token, signature } = req.body.signature;
     const signingKey = process.env.MAILGUN_WEBHOOK_SIGNING_KEY!;
+    const id = req.body.recipient;
     console.log(req.body);
     const isVerified = verify({ signingKey, timestamp, token, signature });
     console.log("-------------------");
