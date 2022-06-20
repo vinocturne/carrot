@@ -33,9 +33,6 @@ async function handler(
             where: {
                 email,
             },
-            select: {
-                id: true,
-            },
         });
         const emailDb = await client.emailEvent.create({
             data: {
