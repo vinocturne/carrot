@@ -5,14 +5,9 @@ interface AuthOptions {
     auth: {
         api_key: string;
         domain: string;
-        tracking: string;
-        tracking_clicks: string;
-        tracking_opens: string;
     };
-    tls: {
-        servername: string;
-        rejectUnauthorized: boolean;
-    };
+    tls: { rejectUnauthorized: boolean };
+    [key: string]: any;
 }
 
 const auth: AuthOptions = {
@@ -20,14 +15,9 @@ const auth: AuthOptions = {
     auth: {
         api_key: process.env.MAILGUN_PRIVATE_API!,
         domain: process.env.MAILGUN_DOMAIN!,
-        tracking: "yes",
-        tracking_clicks: "htmlonly",
-        tracking_opens: "yes",
     },
-    tls: {
-        servername: "mg.mangakiss.jp",
-        rejectUnauthorized: false,
-    },
+    tls: { rejectUnauthorized: false },
+    "X-Mailgun-Track": "yes",
 };
 const nodemailerMailgun = nodemailer.createTransport(mailgun(auth));
 

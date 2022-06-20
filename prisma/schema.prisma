@@ -222,4 +222,3 @@ model Message {
   @@index([streamId])
   @@index([productId])
 }
-
