@@ -22,9 +22,10 @@ async function handler(
     req: NextApiRequest,
     res: NextApiResponse<ResponseType>
 ) {
-    const email = req.body.recipient;
-    const event = req.body.event;
+    const email = req.body["event-data"].recipient;
+    const event = req.body["event-data"].event;
     console.log(req.body);
+    console.log(email);
     console.log(event);
     const { timestamp, token, signature } = req.body.signature;
     const signingKey = process.env.MAILGUN_WEBHOOK_SIGNING_KEY!;
