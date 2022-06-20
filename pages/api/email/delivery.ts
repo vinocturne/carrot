@@ -21,11 +21,10 @@ async function handler(
     req: NextApiRequest,
     res: NextApiResponse<ResponseType>
 ) {
+    console.log(req.body);
     const { timestamp, token, signature } = req.body.signature;
     const signingKey = process.env.MAILGUN_WEBHOOK_SIGNING_KEY!;
-    console.log(timestamp, token, signature);
     const isVerified = verify({ signingKey, timestamp, token, signature });
-    console.log(isVerified);
     console.log("-------------------");
     console.log("webhook come here");
     return res.json({
