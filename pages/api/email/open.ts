@@ -24,17 +24,25 @@ async function handler(
 ) {
     const { timestamp, token, signature } = req.body.signature;
     const signingKey = process.env.MAILGUN_WEBHOOK_SIGNING_KEY!;
-    const id = req.body.recipient;
+    const email = req.body.recipient;
     const event = req.body.event;
     console.log(req.body);
     const isVerified = verify({ signingKey, timestamp, token, signature });
     if (isVerified) {
+        const user = await client.user.findUnique({
+            where: {
+                email,
+            },
+            select: {
+                id: true,
+            },
+        });
         const emailDb = await client.emailEvent.create({
             data: {
                 event,
                 user: {
                     connect: {
-                        email: id,
+                        id: user?.id,
                     },
                 },
             },
