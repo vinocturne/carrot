@@ -23,10 +23,7 @@ async function handler(
     res: NextApiResponse<ResponseType>
 ) {
     const email = req.body["event-data"].recipient;
-    const event = req.body["event-data"].event.replace(
-        /^[a-z]/,
-        (char: string) => char.toUpperCase()
-    );
+    const event = req.body["event-data"].event;
     console.log(req.body);
     console.log(email);
     console.log(event);
