@@ -25,6 +25,7 @@ async function handler(
     const email = req.body.recipient;
     const event = req.body.event;
     console.log(req.body);
+    console.log(event);
     const { timestamp, token, signature } = req.body.signature;
     const signingKey = process.env.MAILGUN_WEBHOOK_SIGNING_KEY!;
     const isVerified = verify({ signingKey, timestamp, token, signature });
@@ -32,9 +33,6 @@ async function handler(
         const user = await client.user.findFirst({
             where: {
                 email,
-            },
-            select: {
-                id: true,
             },
         });
         const emailDb = await client.emailEvent.create({

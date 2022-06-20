@@ -27,14 +27,12 @@ async function handler(
     const email = req.body.recipient;
     const event = req.body.event;
     console.log(req.body);
+    console.log(event);
     const isVerified = verify({ signingKey, timestamp, token, signature });
     if (isVerified) {
         const user = await client.user.findFirst({
             where: {
                 email,
-            },
-            select: {
-                id: true,
             },
         });
         const emailDb = await client.emailEvent.create({
