@@ -48,7 +48,7 @@ async function handler(
             to: email,
             subject: "Nomad Carrot Authentication Email",
             html: `<strong>Authentication Code : ${payload}</strong><br>
-            <h2>바로가기 <a href="https://carrot-pied.vercel.app/">캐럿캐럿</a></h2>`,
+            <h2>바로가기 <a href="https://www.naver.com">캐럿캐럿</a></h2>`,
         };
 
         await new Promise((resolve, reject) => {
